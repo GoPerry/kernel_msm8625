@@ -135,3 +135,5 @@ obj-$(CONFIG_PMBUS)		+= pmbus/
 
 ccflags-$(CONFIG_HWMON_DEBUG_CHIP) := -DDEBUG
 
+#Freescale G-sensor mma8452Q
+obj-$(CONFIG_MXC_MMA8452) 	+= mxc_mma8452.o MMA8452_Calibration.o 

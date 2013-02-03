@@ -30,6 +30,12 @@ obj-$(CONFIG_HP_ILO)		+= hpilo.o
 obj-$(CONFIG_APDS9802ALS)	+= apds9802als.o
 obj-$(CONFIG_ISL29003)		+= isl29003.o
 obj-$(CONFIG_ISL29020)		+= isl29020.o
+obj-$(CONFIG_STK220X_INT_MODE)		+= stk220x_int.o
+obj-$(CONFIG_STK220X_POLL_MODE)		+= stk220x_poll.o
+obj-$(CONFIG_STK2207_POLL_MODE)		+= stk2207.o
+obj-$(CONFIG_STK31XX_POLL_MODE)		+= stk31xx_poll.o
+obj-$(CONFIG_STK31XX_INT_MODE)		+= stk31xx_int.o
+
 obj-$(CONFIG_USB_HSIC_SMSC_HUB) += smsc_hub.o
 obj-$(CONFIG_SENSORS_TSL2550)	+= tsl2550.o
 obj-$(CONFIG_EP93XX_PWM)	+= ep93xx_pwm.o

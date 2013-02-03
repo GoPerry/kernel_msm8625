@@ -17,6 +17,10 @@
 #include <linux/i2c.h>
 #include <devices-msm7x2xa.h>
 
+#if (defined(CONFIG_STK31XX_INT_MODE) || defined(CONFIG_STK31XX_POLL_MODE))
+#include <linux/stk31xx.h>
+#endif
+
 #ifdef CONFIG_AVAGO_APDS990X
 #include <linux/input/apds990x.h>
 #endif
@@ -65,6 +69,49 @@
 
 #if defined(CONFIG_INPUT_KXTJ9)
 #include <linux/input/kxtj9.h>
+#endif
+
+#if (defined(CONFIG_STK31XX_INT_MODE) || defined(CONFIG_STK31XX_POLL_MODE))
+static struct stk31xx_platform_data stk31xx_data = {
+		.als_cmd = 0x49,
+#if defined(CONFIG_ARCH_MSM8625_D9L_C900) || defined(CONFIG_ARCH_MSM8625_D9L_C750)
+		.ps_cmd = 0x0D,
+#else
+		.ps_cmd = 0x25,
+#endif
+		.ps_gain = 0x0D,
+		.transmittance = 200,
+		.ps_high_thd = 40,
+		.ps_low_thd = 30,
+		.int_pin = 39,
+};
+
+static struct i2c_board_info stk3171_i2c_info[] __initdata = {
+#if defined(CONFIG_STK31XX_POLL_MODE)
+		{
+				I2C_BOARD_INFO("stk_ps", 0x90>>1),
+				//I2C_BOARD_INFO("stk_ps", 0xB0>>1),
+				.platform_data = &stk31xx_data,
+				.irq = -1,
+		},
+#endif
+#ifdef CONFIG_STK31XX_INT_MODE
+		{
+				I2C_BOARD_INFO("stk_ps", 0x90>>1),
+				//I2C_BOARD_INFO("stk_ps", 0xB0>>1),
+				.platform_data = &stk31xx_data,
+				.irq = 199,
+		},
+#endif
+};
+#endif
+
+#ifdef CONFIG_MXC_MMA8452
+static struct i2c_board_info mma8452_i2c_info[] __initdata = {
+	{
+		I2C_BOARD_INFO("mma8452",0x1c),
+	},
+};
 #endif
 
 static struct msm_gpio apds990x_cfg_data[] = {
@@ -533,6 +580,20 @@ void __init msm7627a_sensor_init(void)
 			accel_kxtj9_i2c_info,
 			ARRAY_SIZE(accel_kxtj9_i2c_info));
 	}
+#endif
+
+#if (defined(CONFIG_STK31XX_INT_MODE) || defined(CONFIG_STK31XX_POLL_MODE))
+	pr_info("i2c_register_board_info STK3171\n");
+	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
+				stk3171_i2c_info,
+				ARRAY_SIZE(stk3171_i2c_info));
+#endif
+
+#ifdef CONFIG_MXC_MMA8452
+	pr_info("i2c_register_board_info MMA8452 ACC\n");
+	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
+				mma8452_i2c_info,
+				ARRAY_SIZE(mma8452_i2c_info));
 #endif
 
 

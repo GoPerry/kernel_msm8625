@@ -10,6 +10,7 @@
  * GNU General Public License for more details.
  */
 
+#include <linux/gpio.h>
 #include "msm_sensor.h"
 #include "msm.h"
 #include "msm_ispif.h"
@@ -633,6 +634,7 @@ int32_t msm_sensor_power_up(struct msm_sensor_ctrl_t *s_ctrl)
 		pr_err("%s: regulator on failed\n", __func__);
 		goto config_vreg_failed;
 	}
+	gpio_set_value(4,1);
 
 	rc = msm_camera_enable_vreg(&s_ctrl->sensor_i2c_client->client->dev,
 			s_ctrl->sensordata->sensor_platform_info->cam_vreg,
@@ -712,6 +714,8 @@ int32_t msm_sensor_power_down(struct msm_sensor_ctrl_t *s_ctrl)
 		s_ctrl->sensordata->sensor_platform_info->num_vreg,
 		s_ctrl->reg_ptr, 0);
 	msm_camera_request_gpio_table(data, 0);
+	gpio_set_value(4,0);
+
 	kfree(s_ctrl->reg_ptr);
 	return 0;
 }

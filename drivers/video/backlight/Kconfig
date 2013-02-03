@@ -333,6 +333,14 @@ config BACKLIGHT_PCF50633
 	  If you have a backlight driven by a NXP PCF50633 MFD, say Y here to
 	  enable its driver.
 
+config BACKLIGHT_AW9910
+	tristate "AW9910 Backlight Driver"
+	depends on BACKLIGHT_CLASS_DEVICE
+	default n
+	help
+		If you have a LCD backlight connected to the chip AW9910,
+		say Y here to enable this driver.
+
 config BACKLIGHT_AAT2870
 	tristate "AnalogicTech AAT2870 Backlight"
 	depends on BACKLIGHT_CLASS_DEVICE && MFD_AAT2870_CORE

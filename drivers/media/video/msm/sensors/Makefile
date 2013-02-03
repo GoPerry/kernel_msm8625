@@ -25,3 +25,4 @@ obj-$(CONFIG_MT9V115) += mt9v115_v4l2.o
 obj-$(CONFIG_VX6953) += vx6953.o
 obj-$(CONFIG_A8140) += a8140_v4l2.o
 obj-$(CONFIG_S5K3H2_SUNNY_Q8S02E) += s5k3h2_sunny_q8s02e_v4l2.o
+obj-$(CONFIG_GC0339) += gc0339_v4l2.o

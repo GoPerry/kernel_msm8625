@@ -87,6 +87,7 @@ obj-$(CONFIG_FB_MSM_MIPI_DSI_OTM9605A) += mipi_otm9605a.o
 obj-$(CONFIG_FB_MSM_MIPI_DSI_NT35516) += mipi_truly_tft540960_1_e.o
 obj-$(CONFIG_FB_MSM_MIPI_DSI_NT35590) += mipi_NT35590.o
 obj-$(CONFIG_FB_MSM_MIPI_DSI_SIMULATOR) += mipi_simulator.o
+obj-$(CONFIG_FB_MSM_MIPI_DSI_OTM8018B_FWVGA_HSD) += mipi_otm8018b_fwvga_hsd.o
 
 # MIPI Bridge
 obj-$(CONFIG_FB_MSM_MIPI_DSI_TC358764_DSI2LVDS) += mipi_tc358764_dsi2lvds.o
@@ -150,6 +151,7 @@ obj-$(CONFIG_FB_MSM_MIPI_TRULY_VIDEO_WVGA_PT) += mipi_truly_video_wvga_pt.o
 obj-$(CONFIG_FB_MSM_MIPI_NT35510_CMD_WVGA_PT) += mipi_NT35510_cmd_wvga_pt.o
 obj-$(CONFIG_FB_MSM_MIPI_NT35510_VIDEO_WVGA_PT) += mipi_NT35510_video_wvga_pt.o
 obj-$(CONFIG_FB_MSM_MIPI_HX8389B_VIDEO_QHD_PT) += mipi_hx8389b_video_qhd_pt.o
+obj-$(CONFIG_FB_MSM_MIPI_OTM8018B_HSD_VIDEO_FWVGA_PT) += mipi_otm8018b_hsd_video_fwvga_pt.o
 obj-$(CONFIG_FB_MSM_MIPI_OTM9605A_VIDEO_QHD_PT) += mipi_otm9605a_video_qhd_pt.o
 obj-$(CONFIG_FB_MSM_MIPI_NT35516_CMD_QHD_PT) += mipi_truly_tft540960_1_e_cmd_qhd_pt.o
 obj-$(CONFIG_FB_MSM_MIPI_NT35516_VIDEO_QHD_PT) += mipi_truly_tft540960_1_e_video_qhd_pt.o

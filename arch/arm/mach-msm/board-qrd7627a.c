@@ -658,6 +658,7 @@ static struct regulator_consumer_supply vreg_consumers_EXT_1P8V[] = {
 static struct regulator_consumer_supply vreg_consumers_EXT_2P85V_EVBD[] = {
 	REGULATOR_SUPPLY("cam_ov5648_avdd", "0-006c"),
 	REGULATOR_SUPPLY("cam_ov7695_avdd", "0-0042"),
+	REGULATOR_SUPPLY("cam_gc0339_avdd", "0-0042"),
 	REGULATOR_SUPPLY("lcd_vdd", "mipi_dsi.1"),
 };
 

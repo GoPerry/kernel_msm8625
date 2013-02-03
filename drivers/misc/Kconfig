@@ -328,6 +328,39 @@ config ISL29003
 	  This driver can also be built as a module.  If so, the module
 	  will be called isl29003.
 
+config STK31XX_POLL_MODE
+	bool "SenseTek STK31xx polling mode"
+    default n
+	---help---
+	Use polling thread to detech near or far.
+	Driver will report "Near or Far" as input event
+
+config STK31XX_INT_MODE
+	bool "SenseTek STK31xx interrupt mode"
+    default n
+	---help---
+	Use IC internal interrupt function to detect near or far.
+	Be careful, please don't forget to connect your INT-pin to the chip and
+	assign the correct IRQ number in your machine setting.
+
+config STK220X_POLL_MODE
+	bool "SenseTek STK2203 polling mode"
+    default n
+	---help---
+	Support for STK2203 polling mode
+
+config STK2207_POLL_MODE
+	bool "SenseTek STK2207 polling mode"
+    default n
+	---help---
+	Support for STK2207 polling mode
+
+config STK220X_INT_MODE
+    bool "SenseTek STK2203 interrupt mode"
+    default n
+    ---help---
+    Support for STK2203 interrupt mode
+
 config ISL29020
 	tristate "Intersil ISL29020 ambient light sensor"
 	depends on I2C

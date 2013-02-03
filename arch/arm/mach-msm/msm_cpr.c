@@ -391,10 +391,12 @@ cpr_up_event_handler(struct msm_cpr *cpr, uint32_t new_volt)
 		return;
 	}
 	if(cpr->prev_volt_uV != set_volt_uV){
+		#if 0
 		printk("Current cpr chip the floor_fuse=%d pvs_fuse=%d RBCPR_GCNT_TARGET(%d): = 0x%x \n",
 				cpr->config->floor, cpr->config->pvs_fuse,	cpr->curr_osc, readl_relaxed(cpr->base +
 					RBCPR_GCNT_TARGET(cpr->curr_osc)) & TARGET_M);
 		printk("cur_volt %d uV (railway_voltage: %d uV)\n",cpr->prev_volt_uV, set_volt_uV);
+		#endif
 	}
 	cpr->prev_volt_uV = set_volt_uV;
 
@@ -451,10 +453,12 @@ cpr_dn_event_handler(struct msm_cpr *cpr, uint32_t new_volt, uint32_t err_step)
 	}
 
 	if(cpr->prev_volt_uV != set_volt_uV){
+		#if 0
 		printk("Current cpr chip the floor_fuse=%d pvs_fuse=%d RBCPR_GCNT_TARGET(%d): = 0x%x \n",
 				cpr->config->floor, cpr->config->pvs_fuse,	cpr->curr_osc, readl_relaxed(cpr->base +
 					RBCPR_GCNT_TARGET(cpr->curr_osc)) & TARGET_M);
 		printk("cur_volt %d uV (railway_voltage: %d uV)\n",cpr->prev_volt_uV, set_volt_uV);
+		#endif
 	}
 
 	cpr->prev_volt_uV = set_volt_uV;

@@ -396,13 +396,13 @@ int32_t gc0339_sensor_power_up(struct msm_sensor_ctrl_t *s_ctrl)
 	gpio_set_value(info->sensor_pwd, 1);
 	usleep_range(10000, 11000);
 	gpio_set_value(4, 1);
-	/*
+	
 	rc = msm_sensor_power_up(s_ctrl);
 	if (rc < 0) {
 		CDBG("%s: msm_sensor_power_up failed\n", __func__);
 		return rc;
 	}
-	*/
+	
 	usleep_range(1000, 1100);
 	gpio_set_value(info->sensor_pwd, 0);
 	msleep(20);

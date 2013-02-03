@@ -329,19 +329,25 @@ static struct msm_camera_sensor_info msm_camera_sensor_s5k4e1_data = {
 #endif
 
 #ifdef CONFIG_GC0339
-/*
 static struct camera_vreg_t gc0339_gpio_vreg[] = {
-	{"cam_gc0339_avdd", REG_GPIO, 0, 0, 0},
 };
-*/
+
+static struct msm_camera_gpio_conf gpio_conf_gc0339 = {
+	.camera_off_table = camera_off_gpio_table,
+	.camera_off_table_size = ARRAY_SIZE(camera_off_gpio_table),
+	.camera_on_table = camera_on_gpio_table,
+	.camera_on_table_size = ARRAY_SIZE(camera_on_gpio_table),
+	.gpio_no_mux = 1,
+};
+
 static struct msm_camera_sensor_platform_info sensor_board_info_gc0339 = {
 	.mount_angle = 90,
-	.cam_vreg = msm_cam_vreg,
-	.num_vreg = ARRAY_SIZE(msm_cam_vreg),
-/*
+	//.cam_vreg = msm_cam_vreg,
+	//.num_vreg = ARRAY_SIZE(msm_cam_vreg),
 	.cam_vreg = gc0339_gpio_vreg,
 	.num_vreg = ARRAY_SIZE(gc0339_gpio_vreg),
-	*/
+	.gpio_conf = &gpio_conf_gc0339,
+
 };
 
 static struct msm_camera_sensor_flash_data flash_gc0339 = {
@@ -353,7 +359,7 @@ static struct msm_camera_sensor_info msm_camera_sensor_gc0339_data = {
 	.sensor_reset_enable    = 0,
 	.sensor_reset	   = -1,
 	.sensor_pwd	     = GPIO_FRONT_CAM_SHDN,
-	.pdata			= &msm_camera_device_data_csi0[0],//&msm_camera_device_data_csi0[0],
+	.pdata			= &msm_camera_device_data_csi0[0],
 	.flash_data	     = &flash_gc0339,
 	.sensor_platform_info   = &sensor_board_info_gc0339,
 	.csi_if		 = 1,

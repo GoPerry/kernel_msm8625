@@ -516,16 +516,7 @@ static int __devinit mma8452_probe(struct i2c_client *client,
 		result = -EINVAL;
 		goto err_register_polled_device;
 	}
-#if defined(CONFIG_ARCH_MSM8625_D10_E656) || defined(CONFIG_ARCH_MSM8625_V10_W656) || \
-    defined(CONFIG_ARCH_MSM8625_V10_W656_BLU) || defined(CONFIG_ARCH_MSM8625_D9L)
-	mma_status.position = CONFIG_MXC_MMA_POSITION + 2;
-#elif defined(CONFIG_ARCH_MSM8625_V6)
-	mma_status.position = CONFIG_MXC_MMA_POSITION + 4;
-#elif defined(CONFIG_ARCH_MSM8625_D8)
-	mma_status.position = CONFIG_MXC_MMA_POSITION + 7;
-#else
-	mma_status.position = 7;
-#endif
+	mma_status.position = CONFIG_MXC_MMA_POSITION;
 	return 0;
 
 err_register_polled_device:

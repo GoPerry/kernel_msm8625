@@ -194,7 +194,7 @@ config S5K3H2_SUNNY_Q8S02E
 config AR0542
 	bool "Sensor ar0542 (BAYER 5M)"
 	depends on MSM_CAMERA && MSM_CAMERA_V4L2
-	default y
+	default n
 	---help---
 	  Aptina Bayer 5M RAW Sensor
 

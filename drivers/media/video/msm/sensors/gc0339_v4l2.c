@@ -25,7 +25,7 @@
 #undef CDBG_HIGH
 #endif
 
-#define GC0339_VERBOSE_DGB
+//#define GC0339_VERBOSE_DGB
 
 #ifdef GC0339_VERBOSE_DGB
 #define CDBG(fmt, args...) printk(fmt, ##args)
@@ -376,11 +376,11 @@ static struct v4l2_subdev_ops gc0339_subdev_ops = {
 int32_t gc0339_sensor_power_down(struct msm_sensor_ctrl_t *s_ctrl)
 {
 	struct msm_camera_sensor_info *info = NULL;
-	CDBG("%s IN\r\n", __func__);
+	printk("%s IN\r\n", __func__);
 	info = s_ctrl->sensordata;
 	usleep_range(5000, 5100);
 	gpio_set_value(4, 0);
-	//msm_sensor_power_down(s_ctrl);
+	msm_sensor_power_down(s_ctrl);
 	msleep(50);
 	gpio_set_value(info->sensor_pwd, 1);
 	msleep(40);
@@ -391,7 +391,7 @@ int32_t gc0339_sensor_power_up(struct msm_sensor_ctrl_t *s_ctrl)
 {
 	int32_t rc = 0;
 	struct msm_camera_sensor_info *info = s_ctrl->sensordata;
-	CDBG("%s IN\r\n", __func__);
+	printk("%s IN\r\n", __func__);
 
 	gpio_set_value(info->sensor_pwd, 1);
 	usleep_range(10000, 11000);
@@ -449,7 +449,7 @@ int32_t gc0339_sensor_match_id(struct msm_sensor_ctrl_t *s_ctrl)
 	rc = msm_camera_i2c_read(s_ctrl->sensor_i2c_client,
 							 s_ctrl->sensor_id_info->sensor_id_reg_addr,
 							 &id, MSM_CAMERA_I2C_BYTE_DATA);
-	CDBG("gc0339 readid 0x%x : 0x%x\n", 0xC8, id);
+	printk("gc0339 readid 0x%x : 0x%x\n", 0xC8, id);
 	if (rc < 0) {
 		CDBG("%s: read id failed\n", __func__);
 		return rc;

@@ -527,12 +527,6 @@ static struct dsi_cmd_desc otm_cmd_display_on_cmds[] = {
 	{DTYPE_DCS_WRITE, 1, 0, 0, OTM_DISPLAY_ON_DELAY, sizeof(display_on), display_on},
 };
 
-void mipi_otm_sel_mode(int mode)
-{
-	//gpio_set_value_cansleep(GPIO_OTM_LCD_DSI_SEL, (mode == DSI_VIDEO_MODE) ? 1 : 0);
-	return;
-}
-
 static int mipi_otm_lcd_reset(void)
 {
 	int rc = 0;
@@ -602,9 +596,11 @@ static int mipi_otm_lcd_on(struct platform_device *pdev)
 
 	mipi  = &mfd->panel_info.mipi;
 	pr_debug("%s: mode = %d\n", __func__, mipi->mode);
-//#ifndef MIPI_OTM_FAKE_PANEL
 	/* select DSI mode */
-	mipi_otm_sel_mode(mipi->mode);
+	if (!mfd->cont_splash_done) {
+		mfd->cont_splash_done = 1;
+	//	return 0;
+	}
 
 	if (mipi_otm_lcd_reset() < 0) {
 		pr_err("mipi_otm_lcd_reset error\n");
@@ -625,9 +621,6 @@ static int mipi_otm_lcd_on(struct platform_device *pdev)
 //	}
 //#endif
 
-#if defined(CONFIG_ARCH_MSM8625_D9L_C900)
-	mdelay(20);
-#endif
 	pr_debug("mipi_otm_lcd_on ivo_fwvga X\n");
 
 	return 0;

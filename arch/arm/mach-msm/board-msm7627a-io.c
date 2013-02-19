@@ -879,8 +879,8 @@ ft5x06_virtual_keys_register(struct kobject *kobj,
 {
 	if (machine_is_msm8625q_skud() || machine_is_msm8625q_evbd()) {
 		return snprintf(buf, 200,
-			__stringify(EV_KEY) ":" __stringify(KEY_HOME)  ":80:900:135:60"
-			":" __stringify(EV_KEY) ":" __stringify(KEY_MENU)   ":240:900:135:60"
+			__stringify(EV_KEY) ":" __stringify(KEY_MENU)  ":80:900:135:60"
+			":" __stringify(EV_KEY) ":" __stringify(KEY_HOME)   ":240:900:135:60"
 			":" __stringify(EV_KEY) ":" __stringify(KEY_BACK) ":400:900:135:60"
 //			":" __stringify(EV_KEY) ":" __stringify(KEY_SEARCH)   ":472:1000:135:60"
 			"\n");

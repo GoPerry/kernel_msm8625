@@ -599,7 +599,7 @@ static int mipi_otm_lcd_on(struct platform_device *pdev)
 	/* select DSI mode */
 	if (!mfd->cont_splash_done) {
 		mfd->cont_splash_done = 1;
-	//	return 0;
+		return 0;
 	}
 
 	if (mipi_otm_lcd_reset() < 0) {
@@ -730,7 +730,6 @@ static void mipi_otm_set_backlight(struct msm_fb_data_type *mfd)
 		if (prev_bl == PREV_BK_L) {
 			/* turn on backlight */
 			gpio_set_value_cansleep(PWM_GPIO_EN, 1);
-			//udelay(30);
 			udelay(40);
 		}
 		/* adjust backlight level */

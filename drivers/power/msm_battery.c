@@ -113,6 +113,7 @@ struct msm_battery_info {
 	u32 hide;
 	u32 battery_status;
 	u32 battery_voltage;
+	u32 battery_current; /* in mA */
 	u32 battery_capacity;
 	s32 battery_temp;
 	u32 is_charging;
@@ -134,6 +135,7 @@ static struct msm_battery_info msm_battery_info = {
 	.hide = 0,
 	.battery_status = BATTERY_STATUS_GOOD,
 	.battery_voltage = 3700,
+	.battery_current = 0,
 	.battery_capacity = 50,
 	.battery_temp = 200,
 	.is_charging = false,
@@ -219,6 +221,7 @@ static enum power_supply_property msm_battery_psy_properties[] = {
 	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
 	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+	POWER_SUPPLY_PROP_CURRENT_NOW,
 	POWER_SUPPLY_PROP_CAPACITY,
 	POWER_SUPPLY_PROP_TEMP
 };
@@ -248,7 +251,10 @@ static int msm_battery_psy_get_property(struct power_supply *psy,
 		val->intval = msm_battery_info.voltage_min_design;
 		break;
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-		val->intval = msm_battery_info.battery_voltage;
+		val->intval = msm_battery_info.battery_voltage * 1000;
+		break;
+	case POWER_SUPPLY_PROP_CURRENT_NOW:
+		val->intval = msm_battery_info.battery_current;
 		break;
 	case POWER_SUPPLY_PROP_CAPACITY:
 		val->intval = msm_battery_info.battery_capacity;
@@ -371,6 +377,7 @@ void msm_battery_update_psy_status(void)
 	u32 battery_status;
 	u32 battery_voltage;
 	u32 battery_voltage_real;
+	u32 battery_current;
 	u32 battery_capacity;
 	s32 battery_temp;
 	u32 is_charging;
@@ -400,6 +407,7 @@ void msm_battery_update_psy_status(void)
 		battery_status		= msm_battery_info.get_battery_status();
 		battery_voltage		= msm_battery_info.get_battery_mvolts();
 		battery_voltage_real	= -1; // leave it as an invalid value now if use gauge.
+		battery_current		= 0;
 		battery_capacity	= msm_battery_info.get_batt_remaining_capacity();
 		battery_temp		= msm_battery_info.get_battery_temperature();
 		is_charging		= reply_charger.is_charging;
@@ -415,6 +423,7 @@ void msm_battery_update_psy_status(void)
 		battery_voltage		= reply_charger.battery_voltage & 0xFFFF;
 		battery_voltage_real	= (reply_charger.battery_voltage >> 16) & 0xFFFF;
 		battery_capacity	= reply_charger.battery_capacity & 0x7F;
+		battery_current		= reply_charger.battery_capacity >> 20;
 		battery_temp		= reply_charger.battery_temp * 10;
 		is_charging		= reply_charger.is_charging;
 		is_charging_complete	= reply_charger.is_charging_complete;
@@ -427,19 +436,12 @@ void msm_battery_update_psy_status(void)
 		sm_add_event (SM_POWER_EVENT|SM_POWER_EVENT_BATTERY_UPDATE, 0, 0, (void *)&battery_data, sizeof(battery_data));
 #endif
 
-	pr_debug("BATT: received, %d, %d, 0x%x; %d, %d, %d, %d; %d, %d, %d; %d, %d, %d\n",
-		  charger_status, charger_hardware, hide,
-		  battery_status, battery_voltage, battery_capacity, battery_temp,
-		  is_charging, is_charging_complete, is_charging_failed,
-		  reply_charger.battery_voltage >> 16,
-		  (reply_charger.battery_capacity >> 7) & 0x1FFF,
-		  reply_charger.battery_capacity >> 20);
-
 	if (charger_status	== msm_battery_info.charger_status &&
 	    charger_hardware	== msm_battery_info.charger_hardware &&
 	    hide		== msm_battery_info.hide &&
 	    battery_status	== msm_battery_info.battery_status &&
 	    battery_voltage	== msm_battery_info.battery_voltage &&
+	    battery_current	== msm_battery_info.battery_current &&
 	    battery_capacity	== msm_battery_info.battery_capacity &&
 	    battery_temp	== msm_battery_info.battery_temp &&
 	    is_charging		== msm_battery_info.is_charging &&
@@ -448,6 +450,13 @@ void msm_battery_update_psy_status(void)
 		goto done;
 	}
 
+	pr_debug("BATT: received, %d, %d, 0x%x; %d, %d, %d, %d; %d, %d, %d; %d, %d, %d\n",
+		  charger_status, charger_hardware, hide,
+		  battery_status, battery_voltage, battery_capacity, battery_temp,
+		  is_charging, is_charging_complete, is_charging_failed,
+		  reply_charger.battery_voltage >> 16,
+		  (reply_charger.battery_capacity >> 7) & 0x1FFF,
+		  reply_charger.battery_capacity >> 20);
 
 
 	if (msm_battery_info.charger_status != charger_status) {
@@ -528,6 +537,7 @@ void msm_battery_update_psy_status(void)
 	msm_battery_info.hide			= hide;
 	msm_battery_info.battery_status		= battery_status;
 	msm_battery_info.battery_voltage	= battery_voltage;
+	msm_battery_info.battery_current	= battery_current;
 	msm_battery_info.battery_capacity	= battery_capacity;
 	msm_battery_info.battery_temp		= battery_temp;
 	msm_battery_info.is_charging		= is_charging;

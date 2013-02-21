@@ -546,43 +546,12 @@ static int mipi_otm_lcd_reset(void)
 }
 
 //#endif //MIPI_OTM_FAKE_PANEL
-
-#if 0
-extern struct list_head leds_list;
-
-static int late_display_set_brightness(enum led_brightness brightness)
-{
-
-
-	struct led_classdev *led_cdev;
-	int found = 0;
-
-	//pr_debug("%s: brightness = %d\n", __func__, brightness);
-
-	list_for_each_entry(led_cdev, &leds_list, node) {
-		if (!strncmp(led_cdev->name, "lcd-backlight", 13)) {
-			found = 1;
-			break;
-		}
-	}
-
-	if (found) {
-		led_brightness_set(led_cdev, brightness);
-	} else {
-		pr_err("%s: set brightness failed, not found lcd-backlight\n", __func__);
-		return -1;
-	}
-
-	return 0;
-}
-#endif
-
 static int mipi_otm_lcd_on(struct platform_device *pdev)
 {
 	struct msm_fb_data_type *mfd;
 	struct mipi_panel_info *mipi;
 
-	pr_debug("mipi_otm_lcd_on ivo_fwvga E\n");
+	pr_debug("mipi_otm_lcd_on hsd_fwvga E\n");
 
 	mfd = platform_get_drvdata(pdev);
 
@@ -599,6 +568,7 @@ static int mipi_otm_lcd_on(struct platform_device *pdev)
 	/* select DSI mode */
 	if (!mfd->cont_splash_done) {
 		mfd->cont_splash_done = 1;
+		gpio_set_value_cansleep(PWM_GPIO_EN, 0);
 		return 0;
 	}
 
@@ -615,13 +585,7 @@ static int mipi_otm_lcd_on(struct platform_device *pdev)
 						 ARRAY_SIZE(otm_cmd_display_on_cmds));
 	}
 
-//	if (first_on) {
-//		late_display_set_brightness(LED_FULL);
-//		first_on = 0;
-//	}
-//#endif
-
-	pr_debug("mipi_otm_lcd_on ivo_fwvga X\n");
+	pr_debug("mipi_otm_lcd_on hsd_fwvga X\n");
 
 	return 0;
 }
@@ -707,7 +671,7 @@ static void mipi_otm_set_backlight(struct msm_fb_data_type *mfd)
 	if (!bl_level && value)
 		bl_level = 1;
 	bl_level = PREV_BK_L - bl_level;
-	printk("%s: prev_bl = %d, bl_level = %d\n", __func__, prev_bl, bl_level);
+	//printk("%s: prev_bl = %d, bl_level = %d\n", __func__, prev_bl, bl_level);
 	if (bl_level > prev_bl) {
 		step = bl_level - prev_bl;
 		if (bl_level == PREV_BK_L) {

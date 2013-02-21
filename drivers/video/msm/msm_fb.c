@@ -52,6 +52,9 @@
 #ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
 #define MSM_FB_NUM	3
 #endif
+#ifdef CONFIG_FB_MSM_MIPI_DSI
+static unsigned char mipi_nt_on = 1;
+#endif
 
 static unsigned char *fbram;
 static unsigned char *fbram_phys;
@@ -865,6 +868,14 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 				down(&mfd->sem);
 				mfd->panel_power_on = TRUE;
 				up(&mfd->sem);
+#ifdef CONFIG_FB_MSM_MIPI_DSI
+				if (mipi_nt_on) {
+					mfd->bl_level = 160;
+					msleep(60);
+					pdata->set_backlight(mfd);
+					mipi_nt_on = 0;
+				}
+#endif
 
 /* ToDo: possible conflict with android which doesn't expect sw refresher */
 /*

@@ -270,8 +270,179 @@ static struct dsi_cmd_desc otm_video_display_on_cmds[] = {
 	{DTYPE_DCS_WRITE, 1, 0, 0, OTM_DISPLAY_ON_DELAY, sizeof(display_on), display_on},
 };
 
-/* command mode setting */
+static char video1_dzx[2] = {0x00,0x00};
+static char video2_dzx[4] = {0xff,0x80,0x09,0x01};
+static char video3_dzx[2] = {0x00,0x80};
+static char video4_dzx[3] = {0xff,0x80,0x09};
+static char video5_dzx[2] = {0x00,0xb4};
+static char video6_dzx[2] = {0xc0,0x50};
+static char video7_dzx[2] = {0x00,0x82};
+static char video8_dzx[2] = {0xc5,0xa3};
+static char video9_dzx[2] = {0x00,0x90};
+static char video10_dzx[3] = {0xc5,0xD6,0x76};
+static char video11_dzx[2] = {0x00,0x00};
+static char video12_dzx[3] = {0xd8,0xAF,0xAF};
+static char video13_dzx[2] = {0x00,0x00};
+static char video14_dzx[2] = {0xd9,0x58};
+static char video15_dzx[2] = {0x00,0x00};
+static char video16_dzx[17] = {0xe1,0x00,0x04,0x11,0x0e,0x09,0x1F,0x0b,0x0b,0x00,0x05,0x00,0x06,0x0E,0x22,0x1E,0x00};
+static char video17_dzx[2] = {0x00,0x00};
+static char video18_dzx[17] = {0xe2,0x00,0x04,0x11,0x0e,0x09,0x1F,0x0b,0x0b,0x00,0x04,0x00,0x06,0x0E,0x22,0x1E,0x00};
+static char video19_dzx[2] = {0x00,0x81};
+static char video20_dzx[2] = {0xc1,0x66};
+static char video21_dzx[2] = {0x00,0xa1};
+static char video22_dzx[2] = {0xc1,0x00};
+static char video23_dzx[2] = {0x00,0x89};
+static char video24_dzx[2] = {0xc4,0x08};
+static char video25_dzx[2] = {0x00,0xa2};
+static char video26_dzx[4] = {0xc0,0x1b,0x00,0x02};
+static char video27_dzx[2] = {0x00,0x81};
+static char video28_dzx[2] = {0xc4,0x83};
+static char video29_dzx[2] = {0x00,0x92};
+static char video30_dzx[2] = {0xc5,0x01};
+static char video31_dzx[2] = {0x00,0xb1};
+static char video32_dzx[2] = {0xc5,0xa9};
+static char video33_dzx[2] = {0x00,0x92};
+static char video34_dzx[2] = {0xb3,0x45};
+static char video35_dzx[2] = {0x00,0x90};
+static char video36_dzx[2] = {0xb3,0x02};
+static char video37_dzx[2] = {0x00,0x80};
+static char video38_dzx[6] = {0xc0,0x00,0x58,0x00,0x14,0x16};
+static char video39_dzx[2] = {0x00,0x80};
+static char video40_dzx[2] = {0xc4,0x30};
+static char video41_dzx[2] = {0x00,0x90};
+static char video42_dzx[7] = {0xc0,0x00,0x44,0x00,0x00,0x00,0x03};
+static char video43_dzx[2] = {0x00,0xa6};
+static char video44_dzx[4] = {0xc1,0x00,0x00,0x00};
+static char video45_dzx[2] = {0x00,0x80};
+static char video46_dzx[13] = {0xce,0x87,0x03,0x00,0x85,0x03,0x00,0x86,0x03,0x00,0x84,0x03,0x00};
+static char video47_dzx[2] = {0x00,0xa0};
+static char video48_dzx[15] = {0xce,0x38,0x03,0x03,0x58,0x00,0x00,0x00,0x38,0x02,0x03,0x59,0x00,0x00,0x00};
+static char video49_dzx[2] = {0x00,0xb0};
+static char video50_dzx[15] = {0xce,0x38,0x01,0x03,0x5a,0x00,0x00,0x00,0x38,0x00,0x03,0x5b,0x00,0x00,0x00};
+static char video51_dzx[2] = {0x00,0xc0};
+static char video52_dzx[15] = {0xce,0x30,0x00,0x03,0x5c,0x00,0x00,0x00,0x30,0x01,0x03,0x5d,0x00,0x00,0x00};
+static char video53_dzx[2] = {0x00,0xd0};
+static char video54_dzx[15] = {0xce,0x30,0x02,0x03,0x5e,0x00,0x00,0x00,0x30,0x03,0x03,0x5f,0x00,0x00,0x00};
+static char video55_dzx[2] = {0x00,0xc7};
+static char video56_dzx[2] = {0xcf,0x00};
+static char video57_dzx[2] = {0x00,0xc9};
+static char video58_dzx[2] = {0xcf,0x00};
+static char video59_dzx[2] = {0x00,0xc4};
+static char video60_dzx[7] = {0xcb,0x04,0x04,0x04,0x04,0x04,0x04};
+static char video61_dzx[2] = {0x00,0xd9};
+static char video62_dzx[7] = {0xcb,0x04,0x04,0x04,0x04,0x04,0x04};
+static char video63_dzx[2] = {0x00,0x84};
+static char video64_dzx[7] = {0xcc,0x0c,0x0a,0x10,0x0e,0x03,0x04};
+static char video65_dzx[2] = {0x00,0x9e};
+static char video66_dzx[2] = {0xcc,0x0b};
+static char video67_dzx[2] = {0x00,0xa0};
+static char video68_dzx[6] = {0xcc,0x09,0x0f,0x0d,0x01,0x02};
+static char video69_dzx[2] = {0x00,0xb4};
+static char video70_dzx[7] = {0xcc,0x0d,0x0f,0x09,0x0b,0x02,0x01};
+static char video71_dzx[2] = {0x00,0xce};
+static char video72_dzx[2] = {0xcc,0x0e};
+static char video73_dzx[2] = {0x00,0xd0};
+static char video74_dzx[6] = {0xcc,0x10,0x0a,0x0c,0x04,0x03};
+static char video75_dzx[2] = {0x00,0x92};
+static char video76_dzx[3] = {0xff,0x10,0x02};
+static char video77_dzx[2] = {0x00,0x00};
+static char video78_dzx[4] = {0xff,0xff,0xff,0xff};
 
+static struct dsi_cmd_desc otm_video_dzx_display_on_cmds[] = {
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video1_dzx), video1_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video2_dzx), video2_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video3_dzx), video3_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video4_dzx), video4_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video5_dzx), video5_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video6_dzx), video6_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video7_dzx), video7_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video8_dzx), video8_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video9_dzx), video9_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video10_dzx), video10_dzx},
+
+
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video11_dzx), video11_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video12_dzx), video12_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video13_dzx), video13_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video14_dzx), video14_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video15_dzx), video15_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video16_dzx), video16_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video17_dzx), video17_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video18_dzx), video18_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video19_dzx), video19_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video20_dzx), video20_dzx},
+
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video21_dzx), video21_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video22_dzx), video22_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video23_dzx), video23_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video24_dzx), video24_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video25_dzx), video25_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video26_dzx), video26_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video27_dzx), video27_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video28_dzx), video28_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video29_dzx), video29_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video30_dzx), video30_dzx},
+
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video31_dzx), video31_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video32_dzx), video32_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video33_dzx), video33_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video34_dzx), video34_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video35_dzx), video35_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video36_dzx), video36_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video37_dzx), video37_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video38_dzx), video38_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video39_dzx), video39_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video40_dzx), video40_dzx},
+
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video41_dzx), video41_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video42_dzx), video42_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video43_dzx), video43_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video44_dzx), video44_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video45_dzx), video45_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video46_dzx), video46_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video47_dzx), video47_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video48_dzx), video48_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video49_dzx), video49_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video50_dzx), video50_dzx},
+
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video51_dzx), video51_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video52_dzx), video52_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video53_dzx), video53_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video54_dzx), video54_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video55_dzx), video55_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video56_dzx), video56_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video57_dzx), video57_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video58_dzx), video58_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video59_dzx), video59_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video60_dzx), video60_dzx},
+
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video61_dzx), video61_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video62_dzx), video62_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video63_dzx), video63_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video64_dzx), video64_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video65_dzx), video65_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video66_dzx), video66_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video67_dzx), video67_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video68_dzx), video68_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video69_dzx), video69_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video70_dzx), video70_dzx},
+
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video71_dzx), video71_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video72_dzx), video72_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video73_dzx), video73_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video74_dzx), video74_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video75_dzx), video75_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video76_dzx), video76_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video77_dzx), video77_dzx},
+	{DTYPE_GEN_LWRITE, 1, 0, 0, OTM_CMD_DELAY, sizeof(video78_dzx), video78_dzx},
+
+	{DTYPE_DCS_WRITE, 1, 0, 0, OTM_SLEEP_OFF_DELAY, sizeof(exit_sleep), exit_sleep},
+	{DTYPE_DCS_WRITE, 1, 0, 0, OTM_DISPLAY_ON_DELAY, sizeof(display_on), display_on},
+};
+
+
+/* command mode setting */
 static char cmd1[2] = {0x00, 0x00};
 static char cmd2[4] = {0xFF, 0x80, 0x09, 0x01};
 static char cmd3[2] = {0x00, 0x80};
@@ -539,8 +710,13 @@ static int mipi_otm_lcd_on(struct platform_device *pdev)
 	}
 
 	if (mipi->mode == DSI_VIDEO_MODE) {
-		mipi_dsi_cmds_tx(&otm_tx_buf, otm_video_display_on_cmds,
-						 ARRAY_SIZE(otm_video_display_on_cmds));
+		if (gpio_lcd_id)
+			mipi_dsi_cmds_tx(&otm_tx_buf, otm_video_display_on_cmds,
+				ARRAY_SIZE(otm_video_display_on_cmds));
+		else
+			mipi_dsi_cmds_tx(&otm_tx_buf, otm_video_dzx_display_on_cmds,
+				ARRAY_SIZE(otm_video_dzx_display_on_cmds));
+
 	} else if (mipi->mode == DSI_CMD_MODE) {
 		mipi_dsi_cmds_tx(&otm_tx_buf, otm_cmd_display_on_cmds,
 						 ARRAY_SIZE(otm_cmd_display_on_cmds));

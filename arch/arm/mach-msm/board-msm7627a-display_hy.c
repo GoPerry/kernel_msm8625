@@ -1088,11 +1088,16 @@ static int msm_fb_dsi_client_qrd3_reset(void)
 }
 
 #define GPIO_SKUD_LCD_BRDG_RESET_N	78
+#define GPIO_LCD_ID_N	77
 
 static unsigned skud_mipi_dsi_gpio[] = {
 	GPIO_CFG(GPIO_SKUD_LCD_BRDG_RESET_N, 0, GPIO_CFG_OUTPUT,
 			GPIO_CFG_NO_PULL,
 			GPIO_CFG_2MA), /* GPIO_SKUD_LCD_BRDG_RESET_N */
+	GPIO_CFG(GPIO_LCD_ID_N, 0, GPIO_CFG_INPUT,
+			GPIO_CFG_NO_PULL,
+			GPIO_CFG_2MA), /* GPIO_LCD_ID_N */
+
 };
 
 static int msm_fb_dsi_client_skud_reset(void)
@@ -1475,8 +1480,20 @@ static int mipi_dsi_panel_skud_power(int on)
 				gpio_free(GPIO_SKUD_LCD_BRDG_RESET_N);
 				return rc;
 			}
-			return 0;
+
+			rc = gpio_request(GPIO_LCD_ID_N, "lcd_ID_n");
+			if (rc < 0) {
+				pr_err("failed to request lcd brdg reset_n\n");
+				return rc;
+			}
+			rc = gpio_tlmm_config(skud_mipi_dsi_gpio[1],
+			     GPIO_CFG_ENABLE);
+			if (rc < 0) {
+				pr_err("Failed to enable LCD id\n");
+				return rc;
+			}
 		}
+		return 0;
 	}
 
 	if (on) {

@@ -21,12 +21,7 @@
 
 #define GPIO_OTM_LCD_RESET 78
 
-#define FIRST_ON 1
-
 static int gpio_backlight_en = 0xff;
-
-//static int first_on = 1;
-//extern int boot_splash;
 
 static struct msm_panel_common_pdata *mipi_otm_pdata;
 static struct dsi_buf otm_tx_buf;
@@ -63,6 +58,7 @@ static char exit_sleep[2] = {0x11, 0x00};
 static char display_on[2] = {0x29, 0x00};
 static char display_off[2] = {0x28, 0x00};
 static char enter_sleep[2] = {0x10, 0x00};
+static unsigned char gpio_lcd_id;
 
 static struct dsi_cmd_desc otm_display_off_cmds[] = {
 	{DTYPE_DCS_WRITE, 1, 0, 0, 0, sizeof(display_off), display_off},
@@ -414,13 +410,6 @@ static char cmd76[17] = {
 	0x0D, 0x00, 0x04, 0x03,
 	0x05, 0x0D, 0x1E, 0x1B,
 	0x14
-	/*
-		0xE1,0x09,0x0F,0x17,
-		0x0D,0x08,0x1D,0x0D,
-		0x0C,0x01,0x05,0x02,
-		0x08,0x0F,0x1E,0x1B,
-		0x12
-		*/
 };
 static char cmd77[2] = {0x00, 0x00};
 static char cmd78[17] = {
@@ -429,12 +418,6 @@ static char cmd78[17] = {
 	0x0D, 0x00, 0x04, 0x03,
 	0x05, 0x0D, 0x1E, 0x1B,
 	0x14
-	/*
-	0xE2,0x09,0x0F,0x17,
-	0x0D,0x08,0x1D,0x0D,
-	0x0C,0x01,0x05,0x02,
-	0x08,0x0F,0x1E,0x1B,
-	0x12 */
 };
 static char cmd79[2] = {0x00, 0x00};
 static char cmd80[4] = {0xff, 0xff, 0xff, 0xff};
@@ -527,25 +510,6 @@ static struct dsi_cmd_desc otm_cmd_display_on_cmds[] = {
 	{DTYPE_DCS_WRITE, 1, 0, 0, OTM_DISPLAY_ON_DELAY, sizeof(display_on), display_on},
 };
 
-static int mipi_otm_lcd_reset(void)
-{
-	int rc = 0;
-
-	pr_debug("%s\n", __func__);
-
-#if FIRST_ON
-	gpio_set_value_cansleep(GPIO_OTM_LCD_RESET, 1);
-	udelay(1);
-	gpio_set_value_cansleep(GPIO_OTM_LCD_RESET, 0);
-	udelay(15);
-	gpio_set_value_cansleep(GPIO_OTM_LCD_RESET, 1);
-	msleep(5);
-#endif
-
-	return rc;
-}
-
-//#endif //MIPI_OTM_FAKE_PANEL
 static int mipi_otm_lcd_on(struct platform_device *pdev)
 {
 	struct msm_fb_data_type *mfd;
@@ -569,12 +533,9 @@ static int mipi_otm_lcd_on(struct platform_device *pdev)
 	if (!mfd->cont_splash_done) {
 		mfd->cont_splash_done = 1;
 		gpio_set_value_cansleep(PWM_GPIO_EN, 0);
+		/* gpio-high:dijing, gpio-low:dezhixin*/
+		gpio_lcd_id = gpio_get_value(77);
 		return 0;
-	}
-
-	if (mipi_otm_lcd_reset() < 0) {
-		pr_err("mipi_otm_lcd_reset error\n");
-		return -EINVAL;
 	}
 
 	if (mipi->mode == DSI_VIDEO_MODE) {

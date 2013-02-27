@@ -17,6 +17,9 @@
 #include <linux/i2c.h>
 #include <devices-msm7x2xa.h>
 
+#include <linux/nfc/pn544.h>
+
+
 #if (defined(CONFIG_STK31XX_INT_MODE) || defined(CONFIG_STK31XX_POLL_MODE))
 #include <linux/stk31xx.h>
 #endif
@@ -54,6 +57,18 @@
 #ifndef APDS990X_IRQ_GPIO
 #define APDS990X_IRQ_GPIO 17
 #endif
+
+// nfc by yuanwei 
+//
+//#define PN544_IRQ_GPIO  42
+//
+//#define PN544_VEN_GPIO  76 
+//#define PN544_FW_GPIO4 23
+//#define PN544_PW_EN 30
+//
+
+
+// nfc by yuanwei 
 
 #ifndef APDS990x_PS_DETECTION_THRESHOLD
 #define APDS990x_PS_DETECTION_THRESHOLD         600
@@ -346,7 +361,64 @@ static struct i2c_board_info ltr558_i2c_info[] __initdata = {
 		.platform_data =  &ltr558_pdata
 	},
 };
+//add for nfc  start 
+//
+static struct pn544_i2c_platform_data pn544_pdata = {
 
+	.irq_gpio= PN544_IRQ_GPIO,
+    .ven_gpio= PN544_VEN_GPIO,
+    .firm_gpio = PN544_FW_GPIO4,
+
+};
+static struct i2c_board_info pn544_i2c_info[] __initdata = {
+	{
+		I2C_BOARD_INFO("pn544",0x28),
+		.platform_data = &pn544_pdata,
+    	.irq = MSM_GPIO_TO_INT(PN544_IRQ_GPIO)
+
+        
+	},
+};
+#if 0
+static struct msm_gpio pn544_gpio_cfg_data[] = {
+
+
+	
+	{GPIO_CFG(PN544_IRQ_GPIO, 0, GPIO_CFG_INPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),"nfc_int"},
+	{GPIO_CFG(PN544_VEN_GPIO, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),"nfc_ven"},
+	{GPIO_CFG(PN544_FW_GPIO4, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),"nfc_firm"},
+	{GPIO_CFG(PN544_PW_EN, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),"nfc_pvdd"},
+	
+
+};
+#endif 
+static int pn544_gpio_setup(void) {
+	int ret = 0;
+#if 1
+		ret = gpio_tlmm_config(GPIO_CFG(PN544_IRQ_GPIO, 0, GPIO_CFG_INPUT,
+								GPIO_CFG_PULL_UP, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
+
+		ret = gpio_tlmm_config(GPIO_CFG(PN544_VEN_GPIO, 0, GPIO_CFG_OUTPUT,
+								GPIO_CFG_PULL_UP, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
+
+		ret = gpio_tlmm_config(GPIO_CFG(PN544_FW_GPIO4, 0, GPIO_CFG_OUTPUT,
+								GPIO_CFG_PULL_UP, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
+
+		ret = gpio_tlmm_config(GPIO_CFG(PN544_PW_EN, 0, GPIO_CFG_OUTPUT,
+								GPIO_CFG_PULL_UP, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
+#else 
+	ret = msm_gpios_request_enable(pn544_gpio_cfg_data,
+				 sizeof(pn544_gpio_cfg_data)/sizeof(struct msm_gpio));
+#endif 
+	if( ret<0 )
+		printk(KERN_ERR "%s: Failed to obtain pn544  GPIO : %d\n",
+				__func__, ret);
+	
+	return ret;
+}
+
+
+//add for nfc  end
 static struct msm_gpio ltr558_gpio_cfg_data[] = {
 	{GPIO_CFG(LTR558_IRQ_GPIO, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP, GPIO_CFG_6MA), "ltr558_ALS_PS_int"},
 };
@@ -596,5 +668,13 @@ void __init msm7627a_sensor_init(void)
 				ARRAY_SIZE(mma8452_i2c_info));
 #endif
 
+// add for pn544 nfc start 
+	
+	pr_info("i2c_register_board_info PN544 NFS Sensor Driver -----\n");
+	pn544_gpio_setup();
+	i2c_register_board_info(MSM_GSBI1_QUP_I2C_BUS_ID,
+				pn544_i2c_info,
+				ARRAY_SIZE(pn544_i2c_info));
 
 }
+// add for pn544 nfc end 
